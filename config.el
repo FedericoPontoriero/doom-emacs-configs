@@ -34,12 +34,12 @@
 ;; `load-theme' function. This is the default:
 ;;(setq doom-theme 'doom-one)
 (setq doom-theme 'doom-monokai-pro
-      doom-font (font-spec :family "FiraCode Nerd Font" :size 10 :weight 'normal))
+      doom-font (font-spec :family "FiraCode Nerd Font" :size 11 :weight 'normal))
 
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
-(setq display-line-numbers-type t)
+(setq display-line-numbers-type 'relative)
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
@@ -180,16 +180,28 @@
             '(("" . "\\`+?evil[-:]?\\(?:a-\\)?\\(.*\\)") . (nil . "◂\\1"))
             '(("\\`g s" . "\\`evilem--?motion-\\(.*\\)") . (nil . "◃\\1"))))
 
-(when (and (if (functionp electric-pair-open-newline-between-pairs)
-                      (funcall electric-pair-open-newline-between-pairs)
-                    electric-pair-open-newline-between-pairs)
-                  (eq last-command-event ?\n)
-                  (< (1+ (point-min)) (point) (point-max))
-                  (eq (save-excursion
-                        (skip-chars-backward "\t\s")
-                        (char-before (1- (point))))
-                      (matching-paren (char-after))))
-         (save-excursion (newline 1 t)))
+;; (when (and (if (functionp electric-pair-open-newline-between-pairs)
+;;                       (funcall electric-pair-open-newline-between-pairs)
+;;                     electric-pair-open-newline-between-pairs)
+;;                   (eq last-command-event ?\n)
+;;                   (< (1+ (point-min)) (point) (point-max))
+;;                   (eq (save-excursion
+;;                         (skip-chars-backward "\t\s")
+;;                         (char-before (1- (point))))
+;;                       (matching-paren (char-after))))
+;;          (save-excursion (newline 1 t)))
+
+(defun tag-expand ()
+  (interactive)
+  (if (and
+       (looking-at "[ \t]*<")
+       (looking-back ">[ \t]*"))
+      (progn (newline-and-indent)
+             (save-excursion (newline-and-indent))
+             (indent-according-to-mode))
+    (newline-and-indent)))
+
+(add-hook 'rjsx-mode-hook (lambda () (local-set-key (kbd "RET") 'tag-expand)))
 
 (setq-default window-combination-resize t)
 (setq evil-vsplit-window-right t
@@ -212,7 +224,9 @@
       fast-but-imprecise-scrolling nil)
 
   (setq evil-kill-on-visual-paste nil ; Don't put overwritten text in the kill ring
-        evil-move-cursor-back nil))   ; Don't move the block cursor when toggling insert mode
+        evil-move-cursor-back nil)   ; Don't move the block cursor when toggling insert mode
 
 (use-package! speed-type
   :commands (speed-type-text))
+
+(setq global-tree-sitter-mode t)
