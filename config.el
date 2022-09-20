@@ -34,7 +34,7 @@
 ;; `load-theme' function. This is the default:
 ;;(setq doom-theme 'doom-one)
 (setq doom-theme 'doom-monokai-pro
-      doom-font (font-spec :family "FiraCode Nerd Font" :size 11 :weight 'normal))
+      doom-font (font-spec :family "FiraCode Nerd Font" :size 15 :weight 'normal))
 
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
@@ -141,7 +141,6 @@
 
 (provide 'fira-code-mode)
 
-(server-start)
 
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 (after! undo-fu
@@ -305,3 +304,17 @@
         (mapc (lambda (msg)
                 (lsp--parser-on-message msg workspace))
               (nreverse messages))))))
+
+;;; Tree Sitter
+
+(use-package! tree-sitter
+   :hook (prog-mode . turn-on-tree-sitter-mode)
+   :hook (tree-sitter-after-on . tree-sitter-hl-mode)
+   :config
+   (require 'tree-sitter-langs)
+   ;; This makes every node a link to a section of code
+   (setq tree-sitter-debug-jump-buttons t
+         ;; and this highlights the entire sub tree in your code
+         tree-sitter-debug-highlight-jump-region t))
+
+(display-time-mode 1)
