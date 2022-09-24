@@ -318,3 +318,7 @@
          tree-sitter-debug-highlight-jump-region t))
 
 (display-time-mode 1)
+
+(use-package lsp-tailwindcss
+  :init
+  (setq lsp-tailwindcss-add-on-mode t))
