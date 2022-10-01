@@ -322,3 +322,5 @@
 (use-package lsp-tailwindcss
   :init
   (setq lsp-tailwindcss-add-on-mode t))
+
+(setq-hook! 'rjsx-mode-hook +format-with-lsp nil)
