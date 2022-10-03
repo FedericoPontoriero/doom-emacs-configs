@@ -237,6 +237,7 @@
   (evil-define-key 'normal peep-dired-mode-map (kbd "j") 'peep-dired-next-file)
   (evil-define-key 'normal peep-dired-mode-map (kbd "k") 'peep-dired-prev-file))
 
+
 (defadvice! +lsp--create-filter-function (workspace)
   :override #'lsp--create-filter-function
   (let ((body-received 0)
@@ -324,3 +325,9 @@
   (setq lsp-tailwindcss-add-on-mode t))
 
 (setq-hook! 'rjsx-mode-hook +format-with-lsp nil)
+
+(setq auth-sources '("~/.authinfo"))
+
+(add-hook 'rjsx-mode-hook
+          (lambda ()
+            (local-set-key (kbd "C-c C-c") 'rjsx-jump-tag)))
