@@ -80,6 +80,33 @@
 ;; they are implemented.
 
 (beacon-mode 1)
+(use-package doom-modeline
+  :ensure t
+  :init (doom-modeline-mode 1))
+(doom-modeline-mode 1)
+
+(setq doom-modeline-buffer-encoding nil)
+(setq doom-modeline-persp-name nil)
+(setq doom-modeline-github t)
+
+(global-anzu-mode +1)
+(with-eval-after-load 'evil
+  (require 'evil-anzu))
+
+(setq company-show-numbers t)
+
+(set-company-backend! 'ess-r-mode '(company-R-args company-R-objects
+                                    company-dabbrev-code :separate))
+(after! centaur-tabs
+  (centaur-tabs-mode 1)
+  (setq centaur-tabs-height 16
+        centaur-tabs-set-icons t
+        centaur-tabs-modified-marker "o"
+        centaur-tabs-close-button "×"
+        centaur-tabs-set-bar 'above
+        centaur-tabs-gray-out-icons 'buffer)
+  (centaur-tabs-change-fonts "P22 Underground Book" 100))
+
 (use-package fira-code-mode
   :custom (fira-code-mode-disabled-ligatures '("[]" "x"))  ; ligatures you don't want
   :hook prog-mode)                                         ; mode to enable fira-code-mode in
@@ -171,7 +198,7 @@
 
 (setq yas-triggers-in-field t)
 
-(setq which-key-idle-delay 0.5
+(setq which-key-idle-delay 0.3
       which-key-idle-secondary-delay 0.05)
 (setq which-key-allow-multiple-replacements t)
 
@@ -337,3 +364,5 @@
 
 (setq doom-fallback-buffer-name "► Doom"
       +doom-dashboard-name "► Doom")
+
+(global-visual-line-mode 1)
