@@ -34,7 +34,8 @@
 ;; `load-theme' function. This is the default:
 ;;(setq doom-theme 'doom-one)
 (setq doom-theme 'doom-monokai-pro
-      doom-font (font-spec :family "FiraCode Nerd Font" :size 15 :weight 'normal))
+      doom-font (font-spec :family "FiraCode Nerd Font" :size 15 :weight 'normal)
+)
 
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
@@ -160,10 +161,10 @@
   (vundo-glyph-alist vundo-unicode-symbols)
   (vundo-compact-display t)
   (vundo-window-max-height 5))
-(after! doom-modeline
-  (setq display-time-string-forms
-        '((propertize (concat " 🕘 " 24-hours ":" minutes))))
-  (display-time-mode 1)) ; Enable time in the mode-line
+ (after! doom-modeline
+   (setq display-time-string-forms
+         '((propertize (concat " 🕘 " 24-hours ":" minutes))))
+   (display-time-mode 1)) ; Enable time in the mode-line
 
 (use-package! vlf-setup
   :defer-incrementally vlf-tune vlf-base vlf-write vlf-search vlf-occur vlf-follow vlf-ediff vlf)
@@ -178,17 +179,6 @@
   (pushnew! which-key-replacement-alist
             '(("" . "\\`+?evil[-:]?\\(?:a-\\)?\\(.*\\)") . (nil . "◂\\1"))
             '(("\\`g s" . "\\`evilem--?motion-\\(.*\\)") . (nil . "◃\\1"))))
-
-;; (when (and (if (functionp electric-pair-open-newline-between-pairs)
-;;                       (funcall electric-pair-open-newline-between-pairs)
-;;                     electric-pair-open-newline-between-pairs)
-;;                   (eq last-command-event ?\n)
-;;                   (< (1+ (point-min)) (point) (point-max))
-;;                   (eq (save-excursion
-;;                         (skip-chars-backward "\t\s")
-;;                         (char-before (1- (point))))
-;;                       (matching-paren (char-after))))
-;;          (save-excursion (newline 1 t)))
 
 (defun tag-expand ()
   (interactive)
@@ -205,10 +195,12 @@
 (setq-default window-combination-resize t)
 (setq evil-vsplit-window-right t
       evil-split-window-below t)
-(after! doom-modeline
-  (setq doom-modeline-major-mode-icon t
-        doom-modeline-major-mode-color-icon t
-        doom-modeline-buffer-state-icon t))
+
+ (after! doom-modeline
+   (setq doom-modeline-major-mode-icon t
+         doom-modeline-major-mode-color-icon t
+         doom-modeline-buffer-state-icon t))
+
 (set-frame-parameter (selected-frame) 'alpha '(85 100))
 (add-to-list 'default-frame-alist '(alpha 97 100))
 (setq hscroll-step 1
@@ -331,3 +323,17 @@
 (add-hook 'rjsx-mode-hook
           (lambda ()
             (local-set-key (kbd "C-c C-c") 'rjsx-jump-tag)))
+
+(after! evil-snipe
+  (setq evil-snipe-scope 'visible))
+
+(setq confirm-kill-emacs nil)
+
+(add-hook! 'org-mode-hook #'mixed-pitch-mode)
+(add-hook! 'org-mode-hook #'solaire-mode)
+(setq mixed-pitch-variable-pitch-cursor nil)
+
+(setq-default major-mode 'org-mode)
+
+(setq doom-fallback-buffer-name "► Doom"
+      +doom-dashboard-name "► Doom")
