@@ -33,9 +33,9 @@
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
 ;;(setq doom-theme 'doom-one)
-(setq doom-theme 'doom-monokai-pro
-      doom-font (font-spec :family "FiraCode Nerd Font" :size 15 :weight 'normal)
-)
+
+(setq doom-theme 'doom-monokai-pro)
+(setq  doom-font (font-spec :family "FiraCode Nerd Font" :size 15 :weight 'normal))
 
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
@@ -97,15 +97,6 @@
 
 (set-company-backend! 'ess-r-mode '(company-R-args company-R-objects
                                     company-dabbrev-code :separate))
-(after! centaur-tabs
-  (centaur-tabs-mode 1)
-  (setq centaur-tabs-height 16
-        centaur-tabs-set-icons t
-        centaur-tabs-modified-marker "o"
-        centaur-tabs-close-button "×"
-        centaur-tabs-set-bar 'above
-        centaur-tabs-gray-out-icons 'buffer)
-  (centaur-tabs-change-fonts "P22 Underground Book" 100))
 
 (use-package fira-code-mode
   :custom (fira-code-mode-disabled-ligatures '("[]" "x"))  ; ligatures you don't want
@@ -339,10 +330,6 @@
 
 (display-time-mode 1)
 
-(use-package lsp-tailwindcss
-  :init
-  (setq lsp-tailwindcss-add-on-mode t))
-
 (setq-hook! 'rjsx-mode-hook +format-with-lsp nil)
 
 (setq auth-sources '("~/.authinfo"))
@@ -355,10 +342,6 @@
   (setq evil-snipe-scope 'visible))
 
 (setq confirm-kill-emacs nil)
-
-(add-hook! 'org-mode-hook #'mixed-pitch-mode)
-(add-hook! 'org-mode-hook #'solaire-mode)
-(setq mixed-pitch-variable-pitch-cursor nil)
 
 (setq-default major-mode 'org-mode)
 
