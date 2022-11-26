@@ -404,3 +404,6 @@
 (add-hook 'org-mode-hook (lambda () (my-generic-ispell-company-complete-setup)))
 (add-hook 'rst-mode-hook (lambda () (my-generic-ispell-company-complete-setup)))
 (add-hook 'markdown-mode-hook (lambda () (my-generic-ispell-company-complete-setup)))
+
+(after! dap-mode
+  (setq dap-python-debugger 'debugpy))
