@@ -60,3 +60,6 @@
 (package! doom-modeline)
 (package! anzu)
 (package! evil-anzu)
+
+(package! apheleia)
+(package! corfu)
