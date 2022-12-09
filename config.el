@@ -99,7 +99,7 @@
                                     company-dabbrev-code :separate))
 
 (use-package fira-code-mode
-  :custom (fira-code-mode-disabled-ligatures '("[]" "x"))  ; ligatures you don't want
+  :custom (fira-code-mode-disabled-ligatures '("[]" "#{" "#(" "#_" "#_(" "x"))  ; ligatures you don't want
   :hook prog-mode)                                         ; mode to enable fira-code-mode in
 (defun fira-code-mode--make-alist (list)
   "Generate prettify-symbols alist from LIST."
@@ -407,3 +407,32 @@
 
 (after! dap-mode
   (setq dap-python-debugger 'debugpy))
+
+(require 'dap-chrome)
+(require 'dap-node)
+
+(setq ispell-dictionary "es")
+(setq kill-ring-max 500)
+(setq lsp-typescript-implementations-code-lens-enabled t)
+(setq lsp-typescript-references-code-lens-enabled t)
+(use-package! undo-tree
+  :config
+  (setq undo-tree-visualizer-timestamps t)
+  (setq undo-tree-auto-save-history t)
+  (setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo-tree"))))
+
+(setq global-prettify-symbols-mode 'nil)
+
+(after! evil-surround
+  (let ((pairs '((?g "$" . "$")
+                 (?h "(" . ")")
+                 (?j "[" . "]")
+                 (?k "{" . "}")
+                 (?< "<>" . "</>")
+                 (?ø "'" . "'")
+                 (?æ "\"" . "\""))))
+    (prependq! evil-surround-pairs-alist pairs)
+    (prependq! evil-embrace-evil-surround-keys (mapcar #'car pairs))))
+
+(setq +evil-want-o/O-to-continue-comments 'nil)
+

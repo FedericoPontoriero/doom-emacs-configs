@@ -63,3 +63,4 @@
 
 (package! apheleia)
 (package! corfu)
+(package! clang-format)
