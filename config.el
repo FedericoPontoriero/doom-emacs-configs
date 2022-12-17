@@ -35,7 +35,7 @@
 ;;(setq doom-theme 'doom-one)
 
 (setq doom-theme 'doom-monokai-pro)
-(setq  doom-font (font-spec :family "FiraCode Nerd Font" :size 15 :weight 'normal))
+(setq  doom-font (font-spec :family "FiraCode Nerd Font" :size 16 :weight 'normal))
 
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
@@ -436,3 +436,7 @@
 
 (setq +evil-want-o/O-to-continue-comments 'nil)
 
+(add-hook 'window-setup-hook 'toggle-frame-maximized t)
+
+(global-set-key (kbd "C-c C-d") 'delete-pair)
+(global-set-key (kbd "C-c t") 'sgml-delete-tag)
