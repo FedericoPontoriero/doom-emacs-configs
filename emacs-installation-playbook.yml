@@ -1,0 +1,46 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: Install dependencies for compiling Emacs
+      apt:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - build-essential
+        - autoconf
+        - automake
+        - texinfo
+
+    - name: Install Doom Emacs dependencies
+      apt:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - git
+        - curl
+
+    - name: Clone Emacs source code repository
+      git:
+        repo: https://github.com/emacs-mirror/emacs.git
+        dest: /tmp/emacs
+    - name: Compile and install Emacs
+      shell: |
+        cd /tmp/emacs
+        ./autogen.sh
+        ./configure --with-nativecomp
+        make
+        make install
+    - name: Clone Doom Emacs repository
+      git:
+        repo: https://github.com/hlissner/doom-emacs.git
+        dest: /tmp/doom-emacs
+    - name: Install Doom Emacs
+      shell: |
+        cd /tmp/doom-emacs
+        make install
+    - name: Clone configuration files from GitHub repository
+      git:
+        repo: https://github.com/FedericoPontoriero/doom-emacs-configs
+        dest: /
+        version: master
