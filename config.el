@@ -101,7 +101,6 @@
 (use-package fira-code-mode
   :custom (fira-code-mode-disabled-ligatures '("[]" "#{" "#(" "#_" "#_(" "x"))  ; ligatures you don't want
   :hook prog-mode)                                         ; mode to enable fira-code-mode in
-(customize-set-variable 'fira-code-mode-disabled-ligatures '("[]" "#{" "#(" "#_" "#_(" "x"))
 
 (defun fira-code-mode--make-alist (list)
   "Generate prettify-symbols alist from LIST."
@@ -160,6 +159,7 @@
   "Setup Fira Code Symbols"
   (set-fontset-font t '(#Xe100 . #Xe16f) "Fira Code Symbol"))
 
+(customize-set-variable 'fira-code-mode-disabled-ligatures '("[]" "#{" "#(" "#_" "#_(" "x"))
 (provide 'fira-code-mode)
 
 
@@ -175,7 +175,7 @@
 (setq-default x-stretch-cursor t)
 ;; Iterate through CamelCase words
 (global-subword-mode 1)
-(use-package! vundo
+(use-package! vund
   :defer t
   :custom
   (vundo-glyph-alist vundo-unicode-symbols)
@@ -240,7 +240,6 @@
 (use-package! speed-type
   :commands (speed-type-text))
 
-(setq global-tree-sitter-mode t)
 
 (with-eval-after-load 'dired
   ;;(define-key dired-mode-map (kbd "M-p") 'peep-dired)
@@ -320,15 +319,15 @@
 
 ;;; Tree Sitter
 
-(use-package! tree-sitter
-   :hook (prog-mode . turn-on-tree-sitter-mode)
-   :hook (tree-sitter-after-on . tree-sitter-hl-mode)
-   :config
-   (require 'tree-sitter-langs)
-   ;; This makes every node a link to a section of code
-   (setq tree-sitter-debug-jump-buttons t
-         ;; and this highlights the entire sub tree in your code
-         tree-sitter-debug-highlight-jump-region t))
+;; (use-package! tree-sitter
+;;    :hook (prog-mode . turn-on-tree-sitter-mode)
+;;    :hook (tree-sitter-after-on . tree-sitter-hl-mode)
+;;    :config
+;;    (require 'tree-sitter-langs)
+;;    ;; This makes every node a link to a section of code
+;;    (setq tree-sitter-debug-jump-buttons t
+;;          ;; and this highlights the entire sub tree in your code
+;;          tree-sitter-debug-highlight-jump-region t))
 
 (display-time-mode 1)
 
@@ -352,7 +351,6 @@
 
 (global-visual-line-mode 1)
 
-(apheleia-global-mode +1)
 (global-corfu-mode +1)
 
 (use-package company
@@ -442,3 +440,47 @@
 
 (global-set-key (kbd "C-c C-d") 'delete-pair)
 (global-set-key (kbd "C-c t") 'sgml-delete-tag)
+
+
+
+
+(use-package! tree-sitter
+  :when (bound-and-true-p module-file-suffix)
+  :hook (prog-mode . tree-sitter-mode)
+  :hook (tree-sitter-after-on . tree-sitter-hl-mode)
+  :config
+  (require 'tree-sitter-langs)
+  (global-tree-sitter-mode)
+  (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
+  (defadvice! doom-tree-sitter-fail-gracefully-a (orig-fn &rest args)
+    "Don't break with errors when current major mode lacks tree-sitter support."
+    :around #'tree-sitter-mode
+    (condition-case e
+        (apply orig-fn args)
+      (error
+       (unless (string-match-p (concat "^Cannot find shared library\\|"
+                                       "^No language registered\\|"
+                                       "cannot open shared object file")
+                               (error-message-string e))
+         (signal (car e) (cadr e)))))))
+
+(use-package! typescript-mode
+  :mode ("\\.tsx\\'" . typescript-tsx-tree-sitter-mode)
+  :config
+  (setq typescript-indent-level 2)
+
+  (define-derived-mode typescript-tsx-tree-sitter-mode typescript-mode "TypeScript TSX"
+    (setq-local indent-line-function 'rjsx-indent-line))
+
+  (add-hook! 'typescript-tsx-tree-sitter-mode-local-vars-hook
+             #'+javascript-init-lsp-or-tide-maybe-h
+             #'rjsx-minor-mode)
+  (map! :map typescript-tsx-tree-sitter-mode-map
+        "<" 'rjsx-electric-lt
+        ">" 'rjsx-electric-gt))
+
+(after! tree-sitter
+  (add-to-list 'tree-sitter-major-mode-language-alist '(typescript-tsx-tree-sitter-mode . tsx)))
+
+(setq global-tree-sitter-mode 1)
+
