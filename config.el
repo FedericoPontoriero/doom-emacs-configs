@@ -34,7 +34,7 @@
 ;; `load-theme' function. This is the default:
 ;;(setq doom-theme 'doom-one)
 
-(setq doom-theme 'doom-monokai-pro)
+(setq doom-theme 'doom-xcode)
 (setq  doom-font (font-spec :family "FiraCode Nerd Font" :size 16 :weight 'normal))
 
 
@@ -89,14 +89,14 @@
 (setq doom-modeline-persp-name nil)
 (setq doom-modeline-github t)
 
-(global-anzu-mode +1)
-(with-eval-after-load 'evil
-  (require 'evil-anzu))
+;; (global-anzu-mode +1)
+;; (with-eval-after-load 'evil
+;;   (require 'evil-anzu))
 
 (setq company-show-numbers t)
 
-(set-company-backend! 'ess-r-mode '(company-R-args company-R-objects
-                                    company-dabbrev-code :separate))
+;; (set-company-backend! 'ess-r-mode '(company-R-args company-R-objects
+;;                                     company-dabbrev-code :separate))
 
 (use-package fira-code-mode
   :custom (fira-code-mode-disabled-ligatures '("[]" "#{" "#(" "#_" "#_(" "x"))  ; ligatures you don't want
@@ -249,73 +249,73 @@
   (evil-define-key 'normal peep-dired-mode-map (kbd "k") 'peep-dired-prev-file))
 
 
-(defadvice! +lsp--create-filter-function (workspace)
-  :override #'lsp--create-filter-function
-  (let ((body-received 0)
-        leftovers body-length body chunk)
-    (lambda (_proc input)
-      (setf chunk (if (s-blank? leftovers)
-                      input
-                    (concat leftovers input)))
+;; (defadvice! +lsp--create-filter-function (workspace)
+;;   :override #'lsp--create-filter-function
+;;   (let ((body-received 0)
+;;         leftovers body-length body chunk)
+;;     (lambda (_proc input)
+;;       (setf chunk (if (s-blank? leftovers)
+;;                       input
+;;                     (concat leftovers input)))
 
-      (let (messages)
-        (while (not (s-blank? chunk))
-          (if (not body-length)
-              ;; Read headers
-              (if-let ((body-sep-pos (string-match-p "\r\n\r\n" chunk)))
-                  ;; We've got all the headers, handle them all at once:
-                  (setf body-length (lsp--get-body-length
-                                     (mapcar #'lsp--parse-header
-                                             (split-string
-                                              (substring-no-properties chunk
-                                                                       (or (string-match-p "Content-Length" chunk)
-                                                                           (error "Unable to find Content-Length header."))
-                                                                       body-sep-pos)
-                                              "\r\n")))
-                        body-received 0
-                        leftovers nil
-                        chunk (substring-no-properties chunk (+ body-sep-pos 4)))
+;;       (let (messages)
+;;         (while (not (s-blank? chunk))
+;;           (if (not body-length)
+;;               ;; Read headers
+;;               (if-let ((body-sep-pos (string-match-p "\r\n\r\n" chunk)))
+;;                   ;; We've got all the headers, handle them all at once:
+;;                   (setf body-length (lsp--get-body-length
+;;                                      (mapcar #'lsp--parse-header
+;;                                              (split-string
+;;                                               (substring-no-properties chunk
+;;                                                                        (or (string-match-p "Content-Length" chunk)
+;;                                                                            (error "Unable to find Content-Length header."))
+;;                                                                        body-sep-pos)
+;;                                               "\r\n")))
+;;                         body-received 0
+;;                         leftovers nil
+;;                         chunk (substring-no-properties chunk (+ body-sep-pos 4)))
 
-                ;; Haven't found the end of the headers yet. Save everything
-                ;; for when the next chunk arrives and await further input.
-                (setf leftovers chunk
-                      chunk nil))
-            (let* ((chunk-length (string-bytes chunk))
-                   (left-to-receive (- body-length body-received))
-                   (this-body (if (< left-to-receive chunk-length)
-                                  (prog1 (substring-no-properties chunk 0 left-to-receive)
-                                    (setf chunk (substring-no-properties chunk left-to-receive)))
-                                (prog1 chunk
-                                  (setf chunk nil))))
-                   (body-bytes (string-bytes this-body)))
-              (push this-body body)
-              (setf body-received (+ body-received body-bytes))
-              (when (>= chunk-length left-to-receive)
-                (condition-case err
-                    (with-temp-buffer
-                      (apply #'insert
-                             (nreverse
-                              (prog1 body
-                                (setf leftovers nil
-                                      body-length nil
-                                      body-received nil
-                                      body nil))))
-                      (decode-coding-region (point-min)
-                                            (point-max)
-                                            'utf-8)
-                      (goto-char (point-min))
-                      (while (search-forward "\\u0000" nil t)
-                        (replace-match "" nil t))
-                      (goto-char (point-min))
-                      (push (lsp-json-read-buffer) messages))
+;;                 ;; Haven't found the end of the headers yet. Save everything
+;;                 ;; for when the next chunk arrives and await further input.
+;;                 (setf leftovers chunk
+;;                       chunk nil))
+;;             (let* ((chunk-length (string-bytes chunk))
+;;                    (left-to-receive (- body-length body-received))
+;;                    (this-body (if (< left-to-receive chunk-length)
+;;                                   (prog1 (substring-no-properties chunk 0 left-to-receive)
+;;                                     (setf chunk (substring-no-properties chunk left-to-receive)))
+;;                                 (prog1 chunk
+;;                                   (setf chunk nil))))
+;;                    (body-bytes (string-bytes this-body)))
+;;               (push this-body body)
+;;               (setf body-received (+ body-received body-bytes))
+;;               (when (>= chunk-length left-to-receive)
+;;                 (condition-case err
+;;                     (with-temp-buffer
+;;                       (apply #'insert
+;;                              (nreverse
+;;                               (prog1 body
+;;                                 (setf leftovers nil
+;;                                       body-length nil
+;;                                       body-received nil
+;;                                       body nil))))
+;;                       (decode-coding-region (point-min)
+;;                                             (point-max)
+;;                                             'utf-8)
+;;                       (goto-char (point-min))
+;;                       (while (search-forward "\\u0000" nil t)
+;;                         (replace-match "" nil t))
+;;                       (goto-char (point-min))
+;;                       (push (lsp-json-read-buffer) messages))
 
-                  (error
-                   (lsp-warn "Failed to parse the following chunk:\n'''\n%s\n'''\nwith message %s"
-                             (concat leftovers input)
-                             err)))))))
-        (mapc (lambda (msg)
-                (lsp--parser-on-message msg workspace))
-              (nreverse messages))))))
+;;                   (error
+;;                    (lsp-warn "Failed to parse the following chunk:\n'''\n%s\n'''\nwith message %s"
+;;                              (concat leftovers input)
+;;                              err)))))))
+;;         (mapc (lambda (msg)
+;;                 (lsp--parser-on-message msg workspace))
+;;               (nreverse messages))))))
 
 ;;; Tree Sitter
 
@@ -351,59 +351,57 @@
 
 (global-visual-line-mode 1)
 
-(global-corfu-mode +1)
-
-(use-package company
-  :commands (company-complete-common))
+;; (use-package company
+;;   :commands (company-complete-common))
 
 (global-set-key (kbd "C-SPC") 'company-complete-common)
 ;; Dictionary for completion.
 (setq ispell-complete-word-dict
   (expand-file-name (concat user-emacs-directory "aspell_words.txt")))
 
-(defun my-generic-ispell-company-complete-setup ()
-  ;; Only apply this locally.
-  (make-local-variable 'company-backends)
-  (setq company-backends (list 'company-ispell))
+;; (defun my-generic-ispell-company-complete-setup ()
+;;   ;; Only apply this locally.
+;;   (make-local-variable 'company-backends)
+;;   (setq company-backends (list 'company-ispell))
 
-  (when ispell-complete-word-dict
-    (let*
-      (
-        (has-dict-complete
-          (and ispell-complete-word-dict (file-exists-p ispell-complete-word-dict)))
-        (has-dict-personal
-          (and ispell-personal-dictionary (file-exists-p ispell-personal-dictionary)))
-        (is-dict-outdated
-          (and
-            has-dict-complete has-dict-personal
-            (time-less-p
-              (nth 5 (file-attributes ispell-complete-word-dict))
-              (nth 5 (file-attributes ispell-personal-dictionary))))))
+;;   (when ispell-complete-word-dict
+;;     (let*
+;;       (
+;;         (has-dict-complete
+;;           (and ispell-complete-word-dict (file-exists-p ispell-complete-word-dict)))
+;;         (has-dict-personal
+;;           (and ispell-personal-dictionary (file-exists-p ispell-personal-dictionary)))
+;;         (is-dict-outdated
+;;           (and
+;;             has-dict-complete has-dict-personal
+;;             (time-less-p
+;;               (nth 5 (file-attributes ispell-complete-word-dict))
+;;               (nth 5 (file-attributes ispell-personal-dictionary))))))
 
-      (when (or (not has-dict-complete) is-dict-outdated)
-        (with-temp-buffer
+;;       (when (or (not has-dict-complete) is-dict-outdated)
+;;         (with-temp-buffer
 
-          ;; Optional: insert personal dictionary, stripping header and inserting a newline.
-          (when has-dict-personal
-            (insert-file-contents ispell-personal-dictionary)
-            (goto-char (point-min))
-            (when (looking-at "personal_ws\-")
-              (delete-region (line-beginning-position) (1+ (line-end-position))))
-            (goto-char (point-max))
-            (unless (eq ?\n (char-after))
-              (insert "\n")))
+;;           ;; Optional: insert personal dictionary, stripping header and inserting a newline.
+;;           (when has-dict-personal
+;;             (insert-file-contents ispell-personal-dictionary)
+;;             (goto-char (point-min))
+;;             (when (looking-at "personal_ws\-")
+;;               (delete-region (line-beginning-position) (1+ (line-end-position))))
+;;             (goto-char (point-max))
+;;             (unless (eq ?\n (char-after))
+;;               (insert "\n")))
 
-          (call-process "aspell" nil t nil "-d" "en_US" "dump" "master")
-          ;; Case insensitive sort is important for the lookup.
-          (let ((sort-fold-case t))
-            (sort-lines nil (point-min) (point-max)))
-          (write-region nil nil ispell-complete-word-dict))))))
+;;           (call-process "aspell" nil t nil "-d" "en_US" "dump" "master")
+;;           ;; Case insensitive sort is important for the lookup.
+;;           (let ((sort-fold-case t))
+;;             (sort-lines nil (point-min) (point-max)))
+;;           (write-region nil nil ispell-complete-word-dict))))))
 
 ;; Enable this in appropriate modes.
 
-(add-hook 'org-mode-hook (lambda () (my-generic-ispell-company-complete-setup)))
-(add-hook 'rst-mode-hook (lambda () (my-generic-ispell-company-complete-setup)))
-(add-hook 'markdown-mode-hook (lambda () (my-generic-ispell-company-complete-setup)))
+;; (add-hook 'org-mode-hook (lambda () (my-generic-ispell-company-complete-setup)))
+;; (add-hook 'rst-mode-hook (lambda () (my-generic-ispell-company-complete-setup)))
+;; (add-hook 'markdown-mode-hook (lambda () (my-generic-ispell-company-complete-setup)))
 
 (after! dap-mode
   (setq dap-python-debugger 'debugpy))
@@ -423,20 +421,18 @@
 
 (setq global-prettify-symbols-mode 'nil)
 
-(after! evil-surround
-  (let ((pairs '((?g "$" . "$")
-                 (?h "(" . ")")
-                 (?j "[" . "]")
-                 (?k "{" . "}")
-                 (?< "<>" . "</>")
-                 (?ø "'" . "'")
-                 (?æ "\"" . "\""))))
-    (prependq! evil-surround-pairs-alist pairs)
-    (prependq! evil-embrace-evil-surround-keys (mapcar #'car pairs))))
+;; (after! evil-surround
+;;   (let ((pairs '((?g "$" . "$")
+;;                  (?h "(" . ")")
+;;                  (?j "[" . "]")
+;;                  (?k "{" . "}")
+;;                  (?< "<>" . "</>")
+;;                  (?ø "'" . "'")
+;;                  (?æ "\"" . "\""))))
+;;     (prependq! evil-surround-pairs-alist pairs)
+;;     (prependq! evil-embrace-evil-surround-keys (mapcar #'car pairs))))
 
 (setq +evil-want-o/O-to-continue-comments 'nil)
-
-(add-hook 'window-setup-hook 'toggle-frame-maximized t)
 
 (global-set-key (kbd "C-c C-d") 'delete-pair)
 (global-set-key (kbd "C-c t") 'sgml-delete-tag)
@@ -484,3 +480,36 @@
 
 (setq global-tree-sitter-mode 1)
 
+
+;; (defun setup-tide-mode ()
+;;   (interactive)
+;;   (tide-setup)
+;;   (flycheck-mode +1)
+;;   (setq flycheck-check-syntax-automatically '(save mode-enabled))
+;;   (eldoc-mode +1)
+;;   (tide-hl-identifier-mode +1)
+;;   ;; company is an optional dependency. You have to
+;;   ;; install it separately via package-install
+;;   ;; `M-x package-install [ret] company`
+;;   (company-mode +1))
+
+;; ;; aligns annotation to the right hand side
+;; (setq company-tooltip-align-annotations t)
+
+;; ;; formats the buffer before saving
+;; (add-hook 'before-save-hook 'tide-format-before-save)
+
+;; (add-hook 'typescript-mode-hook #'setup-tide-mode)
+
+(use-package apheleia
+  :ensure t
+  :config
+  (apheleia-global-mode +1))
+
+(setq company-idle-delay 0.2
+      company-minimum-prefix-length 2
+      company-tooltip-limit 10
+      )
+(setq read-process-output-max (* 1024 1024)) ;; 1mb
+(setq lsp-idle-delay 0.500)
+(setq lsp-log-io nil) ; if set to true can cause a performance hit
