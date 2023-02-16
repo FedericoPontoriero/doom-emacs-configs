@@ -1,5 +1,0 @@
-# -*- mode: snippet -*-
-# name: const require
-# key: coreq
-# --
-const ${2:name} = require('${1:package}')

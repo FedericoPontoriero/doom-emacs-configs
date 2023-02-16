@@ -48,25 +48,12 @@
 ;(unpin! pinned-package another-pinned-package)
 ;; ...Or *all* packages (NOT RECOMMENDED; will likely break things)
 ;(unpin! t)
-(package! fira-code-mode)
-(package! beacon)
-
-(package! vundo
-  :recipe (:host github
-           :repo "casouri/vundo"))
-
-(package! vlf)
-(package! speed-type)
-(package! doom-modeline)
-(package! anzu)
-(package! evil-anzu)
 
 (package! apheleia)
-(package! corfu)
-(package! clang-format)
 
-(package! tree-sitter
-  :ignore (null (bound-and-true-p module-file-suffix)))
+(package! dap-mode)
 
-(package! tree-sitter-langs
-  :ignore (null (bound-and-true-p module-file-suffix)))
+(package! fira-code-mode)
+
+(package! centered-cursor-mode)
+
