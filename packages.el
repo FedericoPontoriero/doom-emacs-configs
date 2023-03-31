@@ -57,3 +57,8 @@
 
 (package! centered-cursor-mode)
 
+(package! screenshot :recipe (:local-repo "lisp/screenshot"))
+
+(package! info-colors :pin "2e237c301ba62f0e0286a27c1abe48c4c8441143")
+
+;; (package! org-modern :pin "7d037569bc4a05f40262ea110c4cda05c69b5c52")
