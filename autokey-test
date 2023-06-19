@@ -1,0 +1,167 @@
+
+<capslock> 
+    backspace
+
+<alt>a 
+    escape
+
+<q> 
+    period
+<w> 
+    comma
+<e> 
+    XK_dead_tilde
+<r> 
+    p
+<t> 
+    y
+<y> 
+    f
+<u> 
+    g
+<i> 
+    c
+<o> 
+    h
+<p> 
+    l
+
+<s> 
+    o
+<d> 
+    e
+<f> 
+    u
+<g> 
+    i
+<h> 
+    d
+<j> 
+    r
+<k> 
+    t
+<l> 
+    n
+<dead_tilde> 
+    s
+
+<z> 
+    minus
+<x> 
+    q
+<c> 
+    j
+<v> 
+    k
+<b> 
+    x
+<n> 
+    b
+<comma> 
+    w
+<period> 
+    v
+<minus> 
+    z
+
+<control>x 
+    <control>x
+
+<control>c 
+    <control>c
+
+<control>v 
+    <control>v
+
+<control>z 
+    <control>z
+
+<alt>a 
+    !
+
+<alt>s 
+    "
+<alt>d 
+    3
+<alt>f 
+    $
+<alt>g 
+    5
+<alt>h 
+    &
+<alt>j 
+    /
+<alt>k 
+    (
+<alt>l 
+    )
+
+<alt>XK_dead_tilde> 
+    =
+
+<alt>1 
+    |
+<alt>2 
+    @
+<alt>4 
+    ~
+
+<alt>j 
+    <left>
+
+<alt>l 
+    <right>
+
+<alt>i 
+    <up>
+
+<alt>k 
+    <down>
+
+<shift><alt>u 
+    <shift><left>
+
+<shift><alt>o 
+    <shift><right>
+
+<shift><alt>i 
+    <shift><up>
+
+<shift><alt>k 
+    <shift><down>
+
+<alt>q 
+    alt+f4
+
+<alt>w 
+    <control>w
+
+<shift><backquote> 
+    `
+
+<alt>g 
+    <shift>F10
+
+<alt><less> 
+    <XF86AudioRaiseVolume>
+
+<alt><greater> 
+    <XF86AudioLowerVolume>
+
+<super>j 
+    <super><left>
+
+<super>l 
+    <super><right>
+
+<super>k 
+    <super><down>
+
+<super>i 
+    <super><up>
+
+<super>o 
+    <control><super><left>
+
+<super>p 
+    <control><super><right>
